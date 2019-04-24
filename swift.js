@@ -39,7 +39,7 @@ func someFunc(a: Int, b: Int){
 //Прекращает работу блока кода, в котором был объявлен
 
 for i in 1...5{
-	guard i != 3 else {continue} //переход к следующей итерации
+	guard i != 3 else {continue} //переход к следующей итерации, также возможно break
 	print(i)
 }
 
@@ -50,7 +50,11 @@ switch x {
 	default: print(x)
 }
 
-
+switch x {
+	case 10,20:print(10)
+	fallthrough			//провалиться в следующий case
+	default: print(x)
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -99,12 +103,86 @@ Double(123.121323232321123) // 123.1213232323211
 
 print(x) // вывести в консоль
 
-func write(a: Int, b: Int) -> Int{	//указать тип возвращаемого значения
-	print('привет');
-	return a + b
+func write(){	
+	print('привет')
 }
 
-write(3, b: 5);
+func write(a: Int, b: Int) -> Int{	//указать тип возвращаемого значения
+	print('привет')
+	return a + b
+}
+write(a: 3, b: 5)
+
+func write() -> () { 	//ничего не возвращает, можно -> Void
+
+}
+
+func write(a: Int){    //указать тип возвращаемого значения
+ var  a = a
+    a += 1
+}
+
+//переменное количество параметров
+
+func write(ofInt int: Int...) -> Int{    	//внешнее и внутреннее имя
+ var sum = 0
+
+ for i in int{
+ 	sum+=i
+ }
+ return sum
+}
+write(ofInt: 1,2,3,4,5)
+
+func write(_ a: Int) -> Int{    //опустить имя параметра
+    var a = a
+    return 10*a
+}
+write(2)
+
+//вернуть функцию
+func foo(miss: Bool) -> ((Int)->Int){
+
+	func missUp(input: Int) -> Int {return input + 1}
+	func missDown(input: Int) -> Int {return input - 1}
+	return miss ? missUp : missDown
+}
+foo(miss:true)(9)
+
+//closures
+
+let closure = {
+    print("привет")
+}
+func repeatThree(_ closure: () -> ()){
+    for _ in 0...2{
+        closure();
+    }
+}
+repeatThree(closure)
+
+//или
+
+func repeatThree(closure: () -> ()){
+    for _ in 0...2{
+        closure();
+    }
+}
+repeatThree(closure: {
+	() -> () in  		//явно указать тип клоужера
+    print("привет")
+})
+
+repeatThree {
+    () -> () in          //явно указать тип клоужера
+    print("привет")
+}
+
+let unsortedArr = [3, 6, 1, 0, 4]
+let sortedArr = unsortedArr.sorted {
+	(num1: Int, num2: Int) -> Bool in
+	return num1 > num2
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -139,6 +217,32 @@ for i in 0...3{
 	print(i)
 }
 
+for i in array{
+	print(i)
+}
+
+for i in stride(from: 0, through: 10, by: 5){	//включительно 10
+	print(i)
+}
+
+for i in stride(from: 0, to: 10, by: 5){	//не включая 10
+	print(i)
+}
+
+for char in string{
+	print(i)
+}
+
+for (name, y) in dictionary{
+    print(name , y)
+}
+
+for (name, y) in array.enumerated(){
+    print(name , y)
+}
+
+
+
 ////////////////////////////////////////////////////////////////
 
 /*#массивы*/
@@ -162,20 +266,15 @@ array5.count // 4
 //методы
 
 array5.append(100) //[10,15,10,10,100]
-
 array5.insert(100, at: 2) //[10,15,100,10,100]
-
 array5.remove(at: 2) //100
-
 array5.removeFirst() //10
-
 array5.removeLast() //100
-
 array5.removeFirst(n:2) //удалить первые 2
-
 array5.removeLast(n:2) //удалить последние 2
-
 array5.reverse() //перевернуть массив
+
+array.enumerated() //предотсавляет массив в перечисленном виде
 
 ////////////////////////////////////////////////////////////////
 
@@ -211,7 +310,7 @@ deleteVal = [:]
 let stringSet:Set<String> = ["kia","bmw","ford"]
 let set3: Set = [1,2,3,4]
 
-//создать пустой
+//создать пустое
 let set1 = Set<String>()
 let set2: Set<String> = []
 
@@ -243,3 +342,18 @@ let notRepeated = setFrom123.symmetricDifferents(commonValueArray)
 
 //выбрать элементы одного массива, которые не содержатся в другом
 let substracted = setFrom123.subtracting(commonValueArray)
+
+////////////////////////////////////////////////////////////////
+
+/*#кортежи*/
+
+let boy = (5, "Vasya")
+boy.1 // Vasua
+
+let greenP = (color: "red", length: 26, weight: 4)
+greenP.color //red
+
+let (gC, gL, gW) = greenP
+
+let (num1, num2, num3) = (1,2,3)
+
