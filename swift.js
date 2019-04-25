@@ -71,6 +71,33 @@ let z: Double = 1.25 // 15 знаков после запятой
 
 nil //отсутствие значений
 
+//опционал
+
+var fuel: Int? //nil, вопрос указывает на то, что переменная опциональная
+fuel = 20
+print("\(fuel!) liters") //nil liters , ! - убирает слово Optional
+//! - принудительное извлечение из переменной, будет ошибка при nil
+
+//Вывести значение если оно не равно nil
+if let availableFuel = fuel{
+	print("\(availableFuel) liters") 
+} else {
+	print("no fuel data") //значение при nil
+}
+//убирает необходимость в восклицательном знаке
+
+//кортежи
+
+let boy = (5, "Vasya")
+boy.1 // Vasua
+
+let greenP = (color: "red", length: 26, weight: 4)
+greenP.color //red
+
+let (gC, gL, gW) = greenP
+
+let (num1, num2, num3) = (1,2,3)
+
 ////////////////////////////////////////////////////////////////
 
 /*#строки*/
@@ -78,6 +105,8 @@ nil //отсутствие значений
 //интерполяция строки
 let n = 5
 let str = "Это строка номер: \(n)" //вставляет в строку переменную n
+
+let array = newFName.components(separatedBy: " ") // разбить через пробел в массив
 
 ////////////////////////////////////////////////////////////////
 
@@ -251,6 +280,8 @@ let arrayOfInts = [1,2,3,4]
 
 let arrayOfInts: [Int] = [1,2,3,4]
 
+var array = [Class]()
+
 //создать пустой массив
 let arrayOne = Array<Int>()
 let arrayTwo = [Int]()
@@ -287,6 +318,8 @@ let dictionary = ["kia":140, "bmw":121, "ford":130]
 let dict = Dictionary<String, String>()
 let dict2 = [String: String]()
 let dict3: [String: String] = [:]
+
+
 
 dictionary.count // 3
 
@@ -345,15 +378,171 @@ let substracted = setFrom123.subtracting(commonValueArray)
 
 ////////////////////////////////////////////////////////////////
 
-/*#кортежи*/
+/*#объекты*/
 
-let boy = (5, "Vasya")
-boy.1 // Vasua
+//классы
 
-let greenP = (color: "red", length: 26, weight: 4)
-greenP.color //red
+class Human {
+	var name = "Ivan"
+	var age: Int? = 30
+	var hair = true
 
-let (gC, gL, gW) = greenP
+	func description() -> String {
 
-let (num1, num2, num3) = (1,2,3)
+		return "Hello ! My name is \(name) and I'm \(age!) years old"
+	}
+
+	func description1() -> String {
+        guard let hAge = age else{
+            return "Hello ! My name is \(name)"
+        }
+           return "Hello ! My name is \(name) and I'm \(hAge) years old"
+    }
+}
+
+//вычисляемые свойства
+
+class Rectangula{
+    let height: Int
+    let width: Int
+    let depth: Int
+    
+    var volume: Int{
+       return height * width * depth
+    }
+    
+    init(height: Int, width: Int, depth: Int){
+        self.height = height
+        self.width = width
+        self.depth = depth
+    }
+}
+
+let rect = Rectangula(height: 6, width: 6, depth: 6)
+rect.volume
+
+
+class Rectangula{
+    var name: String
+    var sName: String
+    
+    var fName: String{
+        get{
+            return name + " " + sName
+        }
+        
+        set(newFName) {
+            let array = newFName.components(separatedBy: " ")
+            //перезаписываем свойства
+            name = array[0]
+            sName = array[1]
+        }
+    }
+    
+    init(name: String, sName: String){
+        self.name = name
+        self.sName = sName
+    }
+}
+
+let rect = Rectangula(name:"XXX", sName: "YYY")
+rect.fName = "hbdhb jdsbcj"
+rect.name
+
+//свойства объекта
+
+class Human {
+	var name = "Ivan"
+	var age: Int? = 30
+	class var hair: Bool {return true}			//записать свойство в объект
+
+	func description() -> String {
+
+		return "Hello ! My name is \(name) and I'm \(age!) years old" + Human.hair		//обращение к свойству
+	}
+}
+
+//наблюдатели свойств
+
+class SecretLabEmp {
+    var accessLevel = 0 {
+        willSet{
+            print("new boss is about")
+            print("new access level \(newValue)")
+        }
+        
+        didSet{
+            accessDB = accessLevel > 0 ? true : false
+            print("last time i had \(oldValue)")
+        }
+    }
+    
+    var accessDB = false
+}
+
+let empl1 = SecretLabEmp()
+
+empl1.accessLevel
+empl1.accessDB
+
+empl1.accessLevel = 2
+empl1.accessDB
+
+//ленивые свойства
+
+//не инициализируется до обращения к нему
+class Proc{
+	lazy var smalData = smData()	//по умолчанию возвращает nil
+}
+//в свойствах не отображается но при обращении отработает
+
+let pr = Proc()
+pr.smalData
+
+//экземпляр класса
+
+let man1 = Human()
+let man2 = Human()
+
+var array = [Human]()
+array.append(man1)
+array.append(man2)
+
+//Инициализация
+
+//если значения по умолчаниюне заданы, их нужно проинициализировать в классе
+class Human {
+	var name
+	var age: Int? = 30
+	var hair
+
+	init(){
+		name= "Vasya"
+		hair = true
+	}
+
+	init(name: String, age: Int?, hair: bool){
+		self.name= name 						//self ссылается на свойство с таким же именем, при другом имени можно не указывать
+		self.age = age
+		self.hair = hair
+	}
+}
+
+//Наследование
+
+final class Child: Human{
+	var toy = "Horse"
+	override func sayHi() -> String{			//переопеределить метод
+		let origText = super.sayHi()			//обращение к свойству родителя
+	}
+
+	final func sayHi() -> String{			//переопределение метода запрещено
+		let origText = super.sayHi()			
+	}
+
+	init(toy:String, name:String){
+		self.toy = toy
+		super.init(name:name) 		
+	}
+}
 
