@@ -1,1 +1,4 @@
 cmd + слэш - закомментировать
+
+стать админом
+sudo /usr/sbin/DevToolsSecurity —enable 

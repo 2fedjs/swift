@@ -98,6 +98,15 @@ let (gC, gL, gW) = greenP
 
 let (num1, num2, num3) = (1,2,3)
 
+//псевдонимы типов
+
+typealias Meter = Int
+let length: Meter = 50
+
+typealias DictionaryType = [String, Int]
+var dictionary: DictionaryType = [:]
+dictionary["Ford"] = 123
+
 ////////////////////////////////////////////////////////////////
 
 /*#строки*/
@@ -378,6 +387,77 @@ let substracted = setFrom123.subtracting(commonValueArray)
 
 ////////////////////////////////////////////////////////////////
 
+/*#перечисления*/
+
+//значения должны быть уникальны
+enum Movement: Int {
+	case forward = 23
+	case backward = 25
+	case left = 35
+	case right = 43
+}
+
+let moveDir = Movement.forward.rawValue
+
+enum Device {
+    case iPhone, iPad
+    
+    var year: Int{
+        switch self{
+        case .iPhone: return 2007
+        case .iPad: return 2010
+        }
+    }
+}
+
+let moveDir = Device.iPad.year
+
+
+enum Device {
+    case iPhone, iPad(color: String)
+    
+    var year: Int{
+        switch self{
+        case .iPhone: return 2007
+            case .iPad(let color) where color == "black": return 2020
+        case .iPad: return 2010
+        
+        }
+    }
+}
+
+let moveDir = Device.iPad(color: "black").year
+
+
+enum Character{
+	enum Weapon: Int {
+		case: sword = 4
+		case: wand = 1
+
+		var damage: Int{
+			return rawValue * 10
+		}
+	}
+
+	enum CaracterType {
+		case knight
+		case mage
+	}
+}
+let charWeap = Character.Weapon.sword.damage	//40
+
+
+//включения case
+
+inderect enum Lunch{
+	case salad
+	case soup
+	case meal(Lunch, Lunch) 	//включить оба
+}
+let myLunch = Lunch.meal(.salad, .soup)
+
+////////////////////////////////////////////////////////////////
+
 /*#объекты*/
 
 //классы
@@ -546,3 +626,18 @@ final class Child: Human{
 	}
 }
 
+////////////////////////////////////////////////////////////////
+
+/*#уровни доступа*/
+
+class Human {
+	var name
+	var age: Int? = 30
+private	var hair		//разрешает использование только в этом классе
+
+	init(){
+		name= "Vasya"
+		hair = true
+	}
+
+}
