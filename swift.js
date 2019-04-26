@@ -1,6 +1,15 @@
 /*#ссылки*/
 
-//http://online.swiftplayground.run/
+//http://online.swiftplayground.run
+//https://developer.apple.com/documentation - список фрейморков
+//Alamofire - для работы с сетью на swift
+
+////////////////////////////////////////////////////////////////
+
+/*#импорт*/
+
+Import UIKit
+Import Foundation
 
 ////////////////////////////////////////////////////////////////
 
@@ -86,6 +95,10 @@ if let availableFuel = fuel{
 }
 //убирает необходимость в восклицательном знаке
 
+//цепочки опционалов
+
+let salary = person.job?.salary?.salary
+
 //кортежи
 
 let boy = (5, "Vasya")
@@ -107,6 +120,51 @@ typealias DictionaryType = [String, Int]
 var dictionary: DictionaryType = [:]
 dictionary["Ford"] = 123
 
+//проверка типов
+
+for item in array{
+	if item is ClassOne{
+
+	}
+}
+
+//приведение типов
+
+for item in array{
+	if item is ClassOne{
+		let bedSure = item as! ClassOne
+	}
+}
+
+if let bedSure = item as? Bed {
+	bed +=1
+}
+
+switch i{
+	case let item as Int: 		//без восклицательного знака и вопроса
+}
+
+//anyobject и any
+
+let array: [AnyObject] = [a,b,c,d,e] //экземпляры классов без структур и перечислений
+
+let array: [Any] = [a,b,c,d,e,f,g, true, "Str", 0.95] // всё кроме nil
+
+//универсальные шаблоны
+
+func param<T>(param: T) -> {
+	return "\(param)"
+}
+
+struct HelpFunc<T: Comparable, U: Equatable> { 				//подойдут только указанные списки типов
+	func paramVal(param: T, param2: U) -> String{
+		return "\(param)"
+	}
+}
+
+let examp = HelpFunc<String, Int>()
+examp.paramVal(param: "String". param2: 5)
+
 ////////////////////////////////////////////////////////////////
 
 /*#строки*/
@@ -115,7 +173,7 @@ dictionary["Ford"] = 123
 let n = 5
 let str = "Это строка номер: \(n)" //вставляет в строку переменную n
 
-let array = newFName.components(separatedBy: " ") // разбить через пробел в массив
+
 
 ////////////////////////////////////////////////////////////////
 
@@ -222,6 +280,38 @@ let sortedArr = unsortedArr.sorted {
 	return num1 > num2
 }
 
+//defer 
+
+//Выполнится в конце, несколько деферов выполняюся друг за другом в обратном порядке
+
+var x = 0
+func wef(param: Int) -> Int {
+	defer {
+		x+=2
+	}
+
+	defer {
+		x *= 10
+	}
+
+	return param
+} 
+
+wef(param: 1)	//1
+x 				//2
+
+//inout
+
+var a = "b"
+var b = "a"
+func swappy<T>(_ a: inout T, _ b: inout T){
+	let temp = a
+	a = b 
+	b = temp
+}
+
+swappy(&a, &b)
+
 ////////////////////////////////////////////////////////////////
 
 /*#циклы*/
@@ -278,8 +368,6 @@ for (name, y) in dictionary{
 for (name, y) in array.enumerated(){
     print(name , y)
 }
-
-
 
 ////////////////////////////////////////////////////////////////
 
@@ -608,6 +696,22 @@ class Human {
 	}
 }
 
+//деИнициализация
+
+class Human {
+	weak var name: Dog? 	//слабая ссылка
+	unowned var name: Dog 	//слабая ссылка которой обязательно значение нужно создать инициализатор
+
+	init(){
+		self.person= Person()
+	}
+
+	deinit(){
+		print("Human is free")
+	}
+
+}
+
 //Наследование
 
 final class Child: Human{
@@ -626,9 +730,7 @@ final class Child: Human{
 	}
 }
 
-////////////////////////////////////////////////////////////////
-
-/*#уровни доступа*/
+//уровни доступа
 
 class Human {
 	var name
@@ -641,3 +743,179 @@ private	var hair		//разрешает использование только �
 	}
 
 }
+
+//структуры
+
+struct Site {
+    var siteName = "sitename.ru"
+}
+
+let firstSite = Site()
+
+func changeSiteName(site: Site) -> Site {
+    var site = site
+    site.siteName = "differsitename.ru"
+    return site
+}
+
+changeSiteName(site: firstSite)
+firstSite.siteName
+
+//сабскрипты
+
+struct WorkPlace {
+	var workPlace: [String]
+
+	subscript(index: Int) -> String {
+		get{
+			switch index{
+
+				case 0..<workPlace.count: return workPlace[index]
+				default: return nil
+			}
+		}
+
+		set{
+			switch index{
+
+				case 0..<workPlace.count: return workPlace[index] = newValue ?? ""
+				default: break
+			}
+		}
+	}
+}
+
+var work = WorkPlace(workPlace: ["chair", "armchair", "lamp"])
+work[1]
+
+//замыкания
+
+//указать значения, которые захватывать не нужно
+
+let closure = { [x] () -> () in
+	print(x)
+}
+
+////////////////////////////////////////////////////////////////
+
+/*обработка ошибок*/
+
+enum PossibErrors: Error{
+    case notInStock
+    case notEnoughMoney
+}
+
+struct Book{
+    let price: Int
+    var count: Int
+}
+
+class Library{
+    var deposit = 11
+    var libraryBooks = ["Book1": Book(price: 11, count: 1), "Book2": Book(price: 11, count: 0), "Book3": Book(price: 12, count: 3)]
+    
+    func getBook(withName: String) throws {
+        guard var book = libraryBooks[withName] else{
+            throw PossibErrors.notInStock
+        }
+        guard book.count > 0 else{
+            throw PossibErrors.notInStock
+        }
+        
+        guard book.price < deposit else{
+            throw PossibErrors.notEnoughMoney
+        }
+        
+        deposit -= book.price
+        book.count -= 1
+        libraryBooks[withName]
+        print("You got the Book: \(withName)")
+    }
+}
+
+let library = Library()
+library.deposit
+do {
+    try library.getBook(withName: "Book1")
+} catch PossibErrors.notInStock{
+    print("Have no books")
+} catch PossibErrors.notEnoughMoney {
+    print("Have no money")
+}
+
+
+func doConnect() throws -> Int {
+	return 10
+}
+
+let x = try? doConnect()
+
+////////////////////////////////////////////////////////////////
+
+/*протоколы*/
+
+//набор требований к классам, стркутурам, перечислениям
+
+protocol Driver {
+    var car: Bool { get }
+    var license: Bool { get }
+    
+    func toDrive() -> Bool
+}
+
+class FirmDriver: Driver{
+    var car = true
+    var license = true
+    
+    func toDrive() -> Bool {
+        return true
+    }
+}
+
+//либо
+
+extension FirmDriver: Driver{
+    var car: Bool { return true }
+    var license: Bool { return true }
+    
+    func toDrive() -> Bool {
+        return true
+    }
+}
+
+//под несколько
+//наследоваться можно только отодного класса, а подписываться можно под несколько протоколов
+class FirmDriver: ClassA, Protocol1, Protocol2{
+ 
+}
+
+////////////////////////////////////////////////////////////////
+
+/*расширения*/
+
+extension Int {
+	var isEven: Bool {
+		return self % 2 == 0 ? true : false
+	}
+
+	func power(powerValue: Int) -> Int {
+		var tempValue = self
+		for _ in 1..<powerValue {
+			tempValue *= self
+		}
+		return tempValue
+	}
+}
+
+//расширение протокла
+
+//дефолтная реализация протокола
+extension Driver{
+    var car: Bool { return true }
+    var license: Bool { return true }
+    
+    func toDrive() -> Bool {
+        return true
+    }
+}
+//их можно изменить
