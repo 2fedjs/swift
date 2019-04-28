@@ -65,6 +65,19 @@ switch x {
 	default: print(x)
 }
 
+
+enum Planet {
+	case p1, p2, p3, p4
+}
+
+func action(onPlanet planet: Planet) {
+	switch planet {
+		case .p1: break
+		case .p2: break
+		@unknown default: break			//добавляет предупреждении при добавлении новых элементов в перечисление
+	}
+}
+
 ////////////////////////////////////////////////////////////////
 
 /*#типы данных*/
@@ -130,6 +143,8 @@ for item in array{
 
 //приведение типов
 
+Int(String)
+
 for item in array{
 	if item is ClassOne{
 		let bedSure = item as! ClassOne
@@ -173,7 +188,12 @@ examp.paramVal(param: "String". param2: 5)
 let n = 5
 let str = "Это строка номер: \(n)" //вставляет в строку переменную n
 
-
+let multyString = 
+"""
+Привет
+	мир
+		епта!
+"""
 
 ////////////////////////////////////////////////////////////////
 
@@ -404,6 +424,9 @@ array5.reverse() //перевернуть массив
 
 array.enumerated() //предотсавляет массив в перечисленном виде
 
+let array = [1, 2, 3, 4]
+print(array[..<2])
+
 ////////////////////////////////////////////////////////////////
 
 /*#словари*/
@@ -550,7 +573,7 @@ let myLunch = Lunch.meal(.salad, .soup)
 
 //классы
 
-class Human {
+class Human {а
 	var name = "Ivan"
 	var age: Int? = 30
 	var hair = true
@@ -897,6 +920,9 @@ extension Int {
 	var isEven: Bool {
 		return self % 2 == 0 ? true : false
 	}
+
+	/////////////в новом
+	return self.isMultiple(of: 2)
 
 	func power(powerValue: Int) -> Int {
 		var tempValue = self

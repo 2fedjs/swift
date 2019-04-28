@@ -2,3 +2,7 @@ cmd + слэш - закомментировать
 
 стать админом
 sudo /usr/sbin/DevToolsSecurity —enable 
+
+organization identifer
+ru.swiftbook	
+
