@@ -39,3 +39,25 @@ class ViewController: UIViewController {
     }
     
 }
+
+/*#tempConv*/
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var celsiusLabel: UILabel!
+    @IBOutlet weak var farenheitLabel: UILabel!
+    @IBOutlet weak var slider: UISlider! {
+        didSet {
+            slider.maximumValue = 100
+            slider.minimumValue = -100
+            slider.value = 0
+        }
+    }
+    
+    @IBAction func sliderValChanged(_ sender: UISlider){
+        let tempCels = Int(round(sender.value))
+        celsiusLabel.text = "\(tempCels)ºC"
+        farenheitLabel.text = "\(tempCels*9/5 + 32)ºF"
+    }
+
+    
