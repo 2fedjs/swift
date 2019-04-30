@@ -60,4 +60,37 @@ class ViewController: UIViewController {
         farenheitLabel.text = "\(tempCels*9/5 + 32)ºF"
     }
 
+/*#PassData*/
+
+//ViewController
+
+    @IBAction func unwindToMainScreen(segue: UIStoryboardSegue){
+        guard segue.identifier == "unwindSegue" else { return }
+        guard let svc = segue.source as? SecondViewController else { return }
+        self.returnLabel.text = svc.label.text
+    }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let dvc = segue.destination as? SecondViewController else { return }
+        dvc.login = loginTextField.text
+    }
+
+//SecondViewController
+
+    var login: String!
+    
+    @IBOutlet weak var label: UILabel!
+    
+    @IBAction func sendButton(button: UIButton){
+        performSegue(withIdentifier: "unwindSegue", sender: nil)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        guard let login = login else { return }
+        label.text = "Hello, \(login)"
+    }
