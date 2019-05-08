@@ -6,3 +6,5 @@ sudo /usr/sbin/DevToolsSecurity —enable
 organization identifer
 ru.swiftbook	
 
+установить pod
+sudo gem install cocoapods
